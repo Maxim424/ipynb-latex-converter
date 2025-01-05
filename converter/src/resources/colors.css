@@ -1,0 +1,19 @@
+:root {
+    --primary-bg-color: rgb(255, 255, 255);
+    --secondary-bg-color: rgb(242, 242, 242);
+    --primary-text-color: rgb(0, 0, 0);
+    --secondary-text-color: rgb(152, 152, 152);
+    --primary-button-bg: rgb(0, 0, 0);
+    --primary-button-text: rgb(255, 255, 255);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-bg-color: rgb(28, 28, 28);
+        --secondary-bg-color: rgb(0, 0, 0);
+        --primary-text-color: rgb(255, 255, 255);
+        --secondary-text-color: rgb(127, 127, 127);
+        --primary-button-bg: rgb(255, 255, 255);
+        --primary-button-text: rgb(0, 0, 0);
+    }
+}
