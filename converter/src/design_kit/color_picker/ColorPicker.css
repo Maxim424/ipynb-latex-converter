@@ -1,0 +1,16 @@
+.picker-container {
+    margin: 8px 0px;
+    display: flex;
+    align-items: center;
+}
+
+.picker-label {
+    font-weight: normal;
+    margin-right: 8px;
+    color: var(--primary-text-color);
+}
+
+.picker-input {
+    width: 80px;
+    border-radius: 8px;
+}

@@ -1,0 +1,219 @@
+@import url('../../../styles/colors.css');
+
+.process-parent-container {
+    display: flex;
+    flex-direction: row;
+    align-items: top;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--secondary-bg-color);
+    font-family: Arial, sans-serif;
+    gap: 8px;
+}
+
+.process-settings-column {
+    display: flex;
+    flex-direction: column;
+    width: 20vw;
+    min-width: 20vw;
+    max-width: 20vh;
+    height: 100vh;
+    overflow-y: scroll;
+    text-align: left;
+    color: var(--primary-text-color);
+    gap: 16px;
+    user-select: none;
+}
+
+.process-settings {
+    gap: 8px;
+}
+
+.process-file-structure-column {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    min-width: 350px;
+    overflow-y: scroll;
+    text-align: left;
+    color: var(--primary-text-color);
+    gap: 16px;
+    user-select: none;
+}
+
+.process-file-structure-column::-webkit-scrollbar {
+    display: none;
+}
+
+.process-preview-column::-webkit-scrollbar {
+    display: none;
+}
+
+.process-preview-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100vh;
+    min-width: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    text-align: left;
+    color: var(--primary-text-color);
+    gap: 16px;
+    user-select: none;
+}
+
+.process-settins-column-header {
+    height: 36px;
+    min-height: 36px;
+    max-height: 36px;
+    width: calc(100% - 32px);
+    padding: 12px 16px;
+    border-radius: 0px 0px 8px 0px;
+    font-weight: bold;
+    background-color: var(--primary-bg-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0px 0px 20px -5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.process-file-structure-column-header {
+    height: 36px;
+    min-height: 36px;
+    max-height: 36px;
+    width: calc(100% - 32px);
+    padding: 12px 16px;
+    border-radius: 0px 0px 8px 8px;
+    font-weight: bold;
+    background-color: var(--primary-bg-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0px 0px 20px -5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+}
+
+.process-preview-column-header {
+    height: 36px;
+    min-height: 36px;
+    max-height: 36px;
+    width: calc(100% - 32px);
+    padding: 12px 16px;
+    border-radius: 0px 0px 0px 8px;
+    font-weight: bold;
+    background-color: var(--primary-bg-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0px 0px 20px -5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+}
+
+.resizer {
+    width: 8px;
+    min-width: 8px;
+    cursor: ew-resize;
+    transition: background 0.2s;
+    user-select: none;
+}
+
+.resizer:hover {
+    background-color: #999;
+}
+
+.home-button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.icon-grey {
+    color: var(--primary-button-text);
+    fill: var(--primary-button-text);
+}
+
+/* Модалка */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-window {
+    background: var(--tertiary-bg-color);
+    padding: 24px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0px 0px 20px -5px rgba(0, 0, 0, 0.3);
+    color: var(--primary-text-color);
+    animation: slideIn 0.3s ease;
+}
+
+.modal-window span {
+    font-weight: bolder;
+    font-size: 20px;
+}
+
+.modal-window p {
+    font-weight: bolder;
+    font-size: 16px;
+}
+
+.modal-buttons-container {
+    margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.modal-button {
+    color: var(--primary-button-text);
+    background-color: var(--primary-button-bg);
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 16px;
+    cursor: pointer;
+    border: none;
+    padding: 16px;
+    width: 90%;
+    max-width: 328px;
+}
+
+.modal-button:hover {
+    background: var(--primary-button-bg-hover);
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

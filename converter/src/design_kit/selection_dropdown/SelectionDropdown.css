@@ -1,0 +1,32 @@
+.select-container {
+    display: inline-block;
+    align-items: center;
+    background: var(--primary-bg-color);
+    padding: 8px 0px;
+    width: calc(20vw - 48px);
+}
+
+.select-container label {
+    font-weight: normal;
+    margin-right: 8px;
+    color: var(--primary-text-color);
+}
+
+.select-container select {
+    border: none;
+    background: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 10px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s;
+}
+
+.select-container select:hover {
+    background: #eaeaea;
+}
+
+.select-container select:focus {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}

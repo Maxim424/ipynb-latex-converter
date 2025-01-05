@@ -1,0 +1,27 @@
+:root {
+    --primary-bg-color: rgb(255, 255, 255);
+    --secondary-bg-color: #f2f2f2;
+    --tertiary-bg-color: #dbd8d8;
+
+    --primary-text-color: rgb(0, 0, 0);
+    --secondary-text-color: rgb(152, 152, 152);
+
+    --primary-button-bg: rgb(41, 52, 98);
+    --primary-button-bg-hover: rgb(34, 87, 122);
+    --primary-button-text: rgb(255, 255, 255);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-bg-color: rgb(28, 28, 28);
+        --secondary-bg-color: rgb(0, 0, 0);
+        --tertiary-bg-color: rgb(50, 50, 50);
+        
+        --primary-text-color: rgb(255, 255, 255);
+        --secondary-text-color: rgb(127, 127, 127);
+
+        --primary-button-bg: rgb(255, 255, 255);
+        --primary-button-bg-hover: rgb(205, 205, 205);
+        --primary-button-text: rgb(0, 0, 0);
+    }
+}

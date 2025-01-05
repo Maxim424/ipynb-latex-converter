@@ -1,0 +1,51 @@
+# Mac
+*.DS_Store
+
+# Processed files
+uploaded_files/
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.pytest_cache/
+*.coverage
+.coverage.*
+*.hypothesis/
+*.tox/
+*.nox/
+*.coverage*
+*.log
+
+# Virtual environments
+venv/
+env/
+env.bak/
+venv.bak/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# FastAPI specific
+*.db
+*.sqlite3
+*.log
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Test coverage
+coverage.xml
+nosetests.xml
+test-results/

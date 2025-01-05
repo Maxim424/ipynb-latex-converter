@@ -1,0 +1,74 @@
+@import url('../../../styles/colors.css');
+
+.scroll-parent-container {
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 24px);
+}
+
+.scroll-container {
+    align-items: center;
+    align-content: center;
+}
+
+.cell-parent-container {
+    width: 100%;
+    background-color: var(--primary-bg-color);
+    margin: 8px 0px 8px 8px;
+    border-radius: 8px;
+}
+
+.cell-header-container {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    padding: 8px 8px 0px 8px;
+    align-items: center;
+}
+
+.cell-markdown-container {
+    overflow-x: scroll;
+    padding: 0px 16px 16px 16px;
+}
+
+.cell-code-container {
+    padding: 0px 8px 4px 8px;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary-button-bg);
+}
+
+input[type="checkbox"]:hover {
+    accent-color: var(--primary-button-bg-hover);
+}
+
+.syntax-highlighter {
+    border-radius: 6px;
+    margin: 4px 4px;
+}
+
+.execution-result-header {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    gap: 8px;
+}
+
+.execution-result-checkbox {
+    width: 20px;
+    height: 20px;
+}
+
+.execution-result-container {
+    padding: 8px;
+    border-radius: 8px;
+    margin: 0px;
+    overflow-x: scroll;
+}
+
+.execution-result-container::-webkit-scrollbar {
+    display: none;
+}

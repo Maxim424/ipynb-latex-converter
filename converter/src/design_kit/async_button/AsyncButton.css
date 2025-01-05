@@ -1,0 +1,23 @@
+.async-button {
+    display: inline-block;
+    padding: 16px 16px;
+    margin: 8px 8px;
+    color: var(--primary-button-text);
+    background-color: var(--primary-button-bg);
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 16px;
+    cursor: pointer;
+    width: calc(100% - 16px);
+    border: none;
+    position: relative;
+}
+
+.async-button:disabled {
+    cursor: not-allowed;
+    background-color: var(--primary-button-bg);
+}
+
+.async-button:hover {
+    background: var(--primary-button-bg-hover);
+}

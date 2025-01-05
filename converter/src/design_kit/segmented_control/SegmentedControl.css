@@ -1,0 +1,29 @@
+.segmented-control {
+    display: inline-flex;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-left: 16px;
+    background: #999;
+    gap: 8px;
+}
+
+.segmented-control button {
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+    border-radius: 16px;
+}
+
+.segmented-control button.active {
+    background: var(--primary-button-bg);
+    color: var(--primary-button-text);
+}
+
+.segmented-control button:hover {
+    background: var(--primary-button-bg-hover);
+    color: white;
+}
