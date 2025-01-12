@@ -1,6 +1,9 @@
 # Mac
 *.DS_Store
 
+# Processed files
+uploaded_files/
+
 # Python
 *.pyc
 *.pyo
@@ -41,11 +44,6 @@ venv.bak/
 build/
 dist/
 *.egg-info/
-
-# Docker
-*.dockerignore
-Dockerfile*
-docker-compose.yml
 
 # Test coverage
 coverage.xml

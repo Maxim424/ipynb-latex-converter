@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./converter-api
+    container_name: converter-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./converter-api:/app
+    environment:
+      - UVICORN_WORKERS=4
+
+  frontend:
+    build:
+      context: ./converter
+    container_name: converter
+    ports:
+      - "3000:80"
+    volumes:
+      - ./converter:/app
