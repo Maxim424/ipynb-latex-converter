@@ -8,7 +8,13 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM nginx:1.23
-COPY --from=build /app/build /usr/share/nginx/html
+FROM node:18-slim
+WORKDIR /app
 
-EXPOSE 80
+COPY --from=build /app/build .
+
+RUN npm install -g serve
+
+EXPOSE 3000
+
+CMD ["serve", "-s", "/app/build", "-l", "3000"]

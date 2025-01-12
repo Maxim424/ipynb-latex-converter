@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./ProcessPage.css";
+import NotebookCells from "./NotebookCells";
 
 function ProcessPage() {
     const location = useLocation();
@@ -72,13 +73,16 @@ function ProcessPage() {
         <div class="process-parent-container">
             <div class="process-container">
                 <div class="process-column process-column-1">
-                    <button
-                        onClick={handleConvert}
-                        class="process-download-button"
-                    >
-                        Конвертировать
-                    </button>
-                    <div style={{ marginTop: "20px" }}>
+                    <div class="process-settings-header">Settings</div>
+
+                    <div class="process-settings">
+                        <button
+                            onClick={handleConvert}
+                            class="process-download-button"
+                        >
+                            Конвертировать
+                        </button>
+
                         <button
                             onClick={handleDownload}
                             class="process-download-button"
@@ -88,9 +92,15 @@ function ProcessPage() {
                     </div>
                 </div>
                 <div class="process-column process-column-2">
-                    <pre>{formatJson(fileContent)}</pre>
+                    <div class="process-column-header">Notebook cells</div>
+                    <pre><NotebookCells jsonString={fileContent} /></pre>
                 </div>
-                <div class="process-column process-column-3">{texContent}</div>
+                <div class="process-column process-column-3">
+                    <div class="process-column-header">LaTeX</div>
+                    <div class="process-settings">
+                        <pre>{texContent}</pre>
+                    </div>
+                </div>
             </div>
         </div>
     );

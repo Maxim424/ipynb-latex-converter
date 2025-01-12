@@ -1,0 +1,46 @@
+@import url('../resources/colors.css');
+
+.scroll-parent-container {
+    margin-top: 60px;
+    align-items: center;
+    width: 100%;
+}
+
+.scroll-container {
+    align-items: center;
+    align-content: center;
+}
+
+.cell-parent-container {
+    width: calc(100% - 16px);
+    background-color: var(--primary-bg-color);
+    margin: 8px 8px;
+    border-radius: 8px;
+}
+
+.cell-header-container {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    padding: 8px 8px 0px 8px;
+    align-items: center;
+}
+
+.cell-markdown-container {
+    overflow-x: scroll;
+    padding: 16px;
+}
+
+.cell-code-container {
+    padding: 0px 8px 4px 8px;
+}
+
+.cell-checkbox {
+    width: 20px;
+    height: 20px;
+}
+
+.syntax-highlighter {
+    border-radius: 6px;
+    margin: 4px 4px;
+}
