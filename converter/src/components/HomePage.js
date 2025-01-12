@@ -39,7 +39,7 @@ function HomePage() {
       </div>
       <div className="footer">
           <a
-            href="https://github.com/"
+            href="https://github.com/Maxim424/ipynb-latex-converter.git"
             target="_blank"
             rel="noopener noreferrer"
           >
