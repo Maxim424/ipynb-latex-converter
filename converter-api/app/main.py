@@ -1,10 +1,11 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, Form, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 import shutil
 from pathlib import Path
 import subprocess
 import uuid
+import json
 
 app = FastAPI()
 
@@ -20,52 +21,45 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def filter_cells(input_file, cell_indices, output_file):
+    with open(input_file, 'r', encoding='utf-8') as f:
+        notebook = json.load(f)
+
+    filtered_cells = [cell for i, cell in enumerate(notebook['cells']) if i in cell_indices]
+
+    notebook['cells'] = filtered_cells
+
+    temp_file = UPLOAD_DIR / 'temp_filtered.ipynb'
+    with open(temp_file, 'w', encoding='utf-8') as f:
+        json.dump(notebook, f)
+
+    subprocess.run(['jupyter', 'nbconvert', '--to', 'latex', str(temp_file), '--output', output_file], check=True)
+
 @app.post("/convert/")
-async def convert_ipynb(file: UploadFile):
-    # Генерация уникального имени файла
+async def convert_ipynb(file: UploadFile, selectedCells: str = Form(...)):
     unique_id = str(uuid.uuid4())
     file_extension = file.filename.split(".")[-1]
     file_path = UPLOAD_DIR / f"{unique_id}.{file_extension}"
     output_path = UPLOAD_DIR / f"{unique_id}.tex"
 
-    # Сохранение загруженного файла
     with file_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # Конвертация в .tex с помощью nbconvert
-    try:
-        # Выполнение команды с перехватом вывода
-        result = subprocess.run(
-            ["jupyter", "nbconvert", "--to", "latex", f"{unique_id}.{file_extension}", "--output", unique_id],
-            check=True,
-            cwd=UPLOAD_DIR,  # Рабочая директория
-            stdout=subprocess.PIPE,  # Перехват стандартного вывода
-            stderr=subprocess.PIPE,  # Перехват ошибок
-            text=True  # Автоматическая декодировка в строки
-        )
-        
-        # Вывод стандартного вывода и ошибок
-        print("STDOUT:\n", result.stdout)
-        print("STDERR:\n", result.stderr)
+    selected_cells = json.loads(selectedCells)
 
+    try:
+        filter_cells(file_path, selected_cells, output_path.stem)
     except subprocess.CalledProcessError as e:
-        # Вывод ошибок при неудачном выполнении команды
         print("Команда завершилась с ошибкой!")
-        print("STDOUT:\n", e.stdout)
-        print("STDERR:\n", e.stderr)
         return JSONResponse(content={"error": "Ошибка конвертации файла."}, status_code=500)
 
-    # Чтение содержимого .tex файла
     try:
         with output_path.open("r", encoding="utf-8") as tex_file:
             tex_content = tex_file.read()
     except Exception as e:
         return JSONResponse(content={"error": "Ошибка чтения файла."}, status_code=500)
 
-    return {
-        "file_id": unique_id,
-        "tex_content": tex_content
-    }
+    return {"file_id": unique_id, "tex_content": tex_content}
 
 @app.get("/download/{file_id}")
 async def download_file(file_id: str):

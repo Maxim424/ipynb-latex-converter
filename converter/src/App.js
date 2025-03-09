@@ -3,6 +3,7 @@ import './App.css';
 import HomePage from './components/HomePage';
 import ProcessPage from './components/ProcessPage';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProcessPageController from './components/ProcessPageController';
 
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<HomePage/>} />
-        <Route path='/process' element={<ProcessPage/>} />
+        <Route path='/process' element={<ProcessPageController/>} />
       </Routes>
     </Router>
   );
