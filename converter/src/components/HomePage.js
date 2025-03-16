@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./HomePage.css";
+import "../styles/HomePage.css";
 
 function HomePage() {
   const [file, setFile] = useState(null);

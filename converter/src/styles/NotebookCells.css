@@ -1,9 +1,8 @@
-@import url('../resources/colors.css');
+@import url('./colors.css');
 
 .scroll-parent-container {
-    margin-top: 60px;
     align-items: center;
-    width: 100%;
+    width: calc(100% - 24px);
 }
 
 .scroll-container {
@@ -12,7 +11,7 @@
 }
 
 .cell-parent-container {
-    width: calc(100% - 16px);
+    width: 100%;
     background-color: var(--primary-bg-color);
     margin: 8px 8px;
     border-radius: 8px;

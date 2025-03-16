@@ -4,6 +4,7 @@ import ProcessPage from "./ProcessPage";
 const ProcessPageController = () => {
     const [fileContent, setFileContent] = useState("");
     const [texContent, setTexContent] = useState("");
+    const [pdfUrl, setPdfUrl] = useState(null);
     const [fileId, setFileId] = useState("");
     const [selectedCells, setSelectedCells] = useState([]);
 
@@ -17,7 +18,7 @@ const ProcessPageController = () => {
             console.error("Ошибка при парсинге файла:", error);
         }
     };
-    
+
 
     const handleCheckboxChange = (cellIndex) => {
         setSelectedCells((prevSelected) => {
@@ -48,6 +49,9 @@ const ProcessPageController = () => {
                 const data = await response.json();
                 setTexContent(data.tex_content);
                 setFileId(data.file_id);
+                if (data.pdf_url) {
+                    setPdfUrl(`http://localhost:8000${data.pdf_url}`);
+                }
             } else {
                 alert("Ошибка конвертации файла.");
             }
@@ -70,22 +74,13 @@ const ProcessPageController = () => {
         document.body.removeChild(link);
     };
 
-    console.log("Передача пропсов в ProcessPage:", {
-        fileContent,
-        setFileContent,
-        texContent,
-        onConvert: handleConvert,
-        onDownload: handleDownload,
-        selectedCells,
-        onCheckboxChange: handleCheckboxChange
-    });
-    
 
     return (
         <ProcessPage
             fileContent={fileContent}
             handleFileLoad={handleFileLoad}
             texContent={texContent}
+            pdfUrl={pdfUrl}
             onConvert={handleConvert}
             onDownload={handleDownload}
             selectedCells={selectedCells}

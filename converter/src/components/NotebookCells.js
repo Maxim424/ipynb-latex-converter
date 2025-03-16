@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import "./NotebookCells.css";
+import "../styles/NotebookCells.css";
 
 const NotebookCells = ({ jsonString, selectedCells, onCheckboxChange }) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -43,7 +43,9 @@ const NotebookCells = ({ jsonString, selectedCells, onCheckboxChange }) => {
                                     className="cell-checkbox"
                                     onChange={() => onCheckboxChange(index)}
                                 />
-                                <span>{cell.cell_type.toUpperCase()}</span>
+                                <span style={{ fontWeight: "bold" }}>
+                                    {cell.cell_type.toUpperCase()}
+                                </span>
                             </label>
                             <div>
                                 {cell.cell_type === "markdown" ? (
@@ -51,9 +53,15 @@ const NotebookCells = ({ jsonString, selectedCells, onCheckboxChange }) => {
                                         <ReactMarkdown>{cell.source.join("")}</ReactMarkdown>
                                     </div>
                                 ) : (
-                                    <SyntaxHighlighter language="python" style={isDarkMode ? materialDark : prism}>
-                                        {cell.source.join("")}
-                                    </SyntaxHighlighter>
+                                    <div class="cell-code-container">
+                                        <SyntaxHighlighter
+                                            class="syntax-highlighter"
+                                            language="python"
+                                            style={isDarkMode ? materialDark : prism}
+                                        >
+                                            {cell.source.join("")}
+                                        </SyntaxHighlighter>
+                                    </div>
                                 )}
                             </div>
                         </div>

@@ -34,13 +34,15 @@ def filter_cells(input_file, cell_indices, output_file):
         json.dump(notebook, f)
 
     subprocess.run(['jupyter', 'nbconvert', '--to', 'latex', str(temp_file), '--output', output_file], check=True)
+    subprocess.run(['jupyter', 'nbconvert', '--to', 'pdf', str(temp_file), '--output', output_file], check=True)
 
 @app.post("/convert/")
 async def convert_ipynb(file: UploadFile, selectedCells: str = Form(...)):
     unique_id = str(uuid.uuid4())
     file_extension = file.filename.split(".")[-1]
     file_path = UPLOAD_DIR / f"{unique_id}.{file_extension}"
-    output_path = UPLOAD_DIR / f"{unique_id}.tex"
+    output_tex = UPLOAD_DIR / f"{unique_id}.tex"
+    output_pdf = UPLOAD_DIR / f"{unique_id}.pdf"
 
     with file_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
@@ -48,18 +50,23 @@ async def convert_ipynb(file: UploadFile, selectedCells: str = Form(...)):
     selected_cells = json.loads(selectedCells)
 
     try:
-        filter_cells(file_path, selected_cells, output_path.stem)
+        filter_cells(file_path, selected_cells, output_tex.stem)
     except subprocess.CalledProcessError as e:
-        print("Команда завершилась с ошибкой!")
         return JSONResponse(content={"error": "Ошибка конвертации файла."}, status_code=500)
 
     try:
-        with output_path.open("r", encoding="utf-8") as tex_file:
+        with output_tex.open("r", encoding="utf-8") as tex_file:
             tex_content = tex_file.read()
+        with output_pdf.open("rb") as pdf_file:
+            pdf_bytes = pdf_file.read()
     except Exception as e:
         return JSONResponse(content={"error": "Ошибка чтения файла."}, status_code=500)
 
-    return {"file_id": unique_id, "tex_content": tex_content}
+    return {
+        "file_id": unique_id,
+        "tex_content": tex_content,
+        "pdf_url": f"/files/{unique_id}.pdf"
+    }
 
 @app.get("/download/{file_id}")
 async def download_file(file_id: str):
@@ -74,12 +81,9 @@ async def download_file(file_id: str):
         filename=f"{file_id}.tex"
     )
 
-@app.post("/upload/")
-async def upload_file(file: UploadFile = File(...)):
-    try:
-        file_path = UPLOAD_DIR / file.filename
-        with file_path.open("wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        return JSONResponse(content={"filename": file.filename, "message": "File uploaded successfully"})
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"File upload failed: {str(e)}")
+@app.get("/files/{file_name}")
+async def get_file(file_name: str):
+    file_path = UPLOAD_DIR / file_name
+    if file_path.exists():
+        return FileResponse(file_path, media_type='application/pdf')
+    return JSONResponse(content={"error": "Файл не найден."}, status_code=404)
