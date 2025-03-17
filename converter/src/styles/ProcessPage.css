@@ -46,6 +46,10 @@
     display: none;
 }
 
+.process-preview-column::-webkit-scrollbar {
+    display: none;
+}
+
 .process-preview-column {
     display: flex;
     flex-direction: column;
