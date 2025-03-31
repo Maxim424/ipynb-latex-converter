@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/HomePage.css";
+import "./HomePage.css";
+import { useToast } from "../../design_kit/notification/ToastContext";
 
 function HomePage() {
   const [file, setFile] = useState(null);
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
 
     if (!selectedFile) {
-      alert("Файл не выбран");
+      showToast("Файл не выбран!");
+      return;
+    }
+
+    if (!selectedFile.name.endsWith(".ipynb")) {
+      showToast("Можно загружать только файлы .ipynb!");
       return;
     }
 
@@ -33,20 +40,21 @@ function HomePage() {
             id="file-input"
             type="file"
             className="file-input"
+            accept=".ipynb"
             onChange={handleFileChange}
           />
         </div>
       </div>
       <div className="footer">
-          <a
-            href="https://github.com/Maxim424/ipynb-latex-converter.git"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Исходный код на GitHub
-          </a>
-          <a href="http://127.0.0.1:8000/docs">Документация</a>
-        </div>
+        <a
+          href="https://github.com/Maxim424/ipynb-latex-converter.git"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Исходный код на GitHub
+        </a>
+        <a href="http://127.0.0.1:8000/docs">Документация</a>
+      </div>
     </div>
   );
 }

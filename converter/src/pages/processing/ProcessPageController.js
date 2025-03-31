@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ProcessPage from "./ProcessPage";
+import { useToast } from "../../design_kit/notification/ToastContext";
 
 const ProcessPageController = () => {
     const [fileContent, setFileContent] = useState("");
@@ -7,6 +8,9 @@ const ProcessPageController = () => {
     const [pdfUrl, setPdfUrl] = useState(null);
     const [fileId, setFileId] = useState("");
     const [selectedCells, setSelectedCells] = useState([]);
+    const [selectionMode, setSelectionMode] = useState("custom"); // Выбранный режим
+
+    const { showToast } = useToast();
 
     const handleFileLoad = (fileContent) => {
         try {
@@ -27,11 +31,14 @@ const ProcessPageController = () => {
                 : [...prevSelected, cellIndex];
             return updated.sort((a, b) => a - b);
         });
+
+        // Если пользователь вручную меняет чекбоксы – переключаемся в "custom"
+        setSelectionMode("custom");
     };
 
     const handleConvert = async (file) => {
         if (!file) {
-            alert("Файл не найден!");
+            showToast("Файл не найден!")
             return;
         }
 
@@ -53,7 +60,7 @@ const ProcessPageController = () => {
                     setPdfUrl(`http://localhost:8000${data.pdf_url}`);
                 }
             } else {
-                alert("Ошибка конвертации файла.");
+                showToast("Ошибка конвертации файла!")
             }
         } catch (error) {
             console.error("Ошибка:", error);
@@ -62,7 +69,7 @@ const ProcessPageController = () => {
 
     const handleDownload = async (file) => {
         if (!fileId) {
-            alert("Файл не готов для скачивания!");
+            showToast("Файл не готов для скачивания!")
             return;
         }
 
@@ -84,7 +91,10 @@ const ProcessPageController = () => {
             onConvert={handleConvert}
             onDownload={handleDownload}
             selectedCells={selectedCells}
+            setSelectedCells={setSelectedCells}
             onCheckboxChange={handleCheckboxChange}
+            selectionMode={selectionMode}
+            setSelectionMode={setSelectionMode}
         />
     );
 };

@@ -1,4 +1,4 @@
-@import url('./colors.css');
+@import url('../../../styles/colors.css');
 
 .scroll-parent-container {
     align-items: center;

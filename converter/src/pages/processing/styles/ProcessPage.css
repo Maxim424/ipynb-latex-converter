@@ -1,4 +1,4 @@
-@import url('./colors.css');
+@import url('../../../styles/colors.css');
 
 .process-parent-container {
     display: flex;
@@ -66,7 +66,7 @@
 
 .process-settins-column-header {
     width: calc(100% - 32px);
-    padding: 16px;
+    padding: 21px 16px;
     border-radius: 0px 0px 8px 0px;
     font-weight: bold;
     background-color: var(--primary-bg-color);
@@ -78,7 +78,7 @@
 
 .process-file-structure-column-header {
     width: calc(100% - 32px);
-    padding: 16px;
+    padding: 21px 16px;
     border-radius: 0px 0px 8px 8px;
     font-weight: bold;
     background-color: var(--primary-bg-color);
@@ -111,3 +111,63 @@
 .resizer:hover {
     background-color: #999;
 }
+
+.preview-toggle {
+    display: inline-flex;
+    background: #999;
+    border-radius: 16px;
+    margin-left: 16px;
+    padding: 2px;
+}
+
+.preview-toggle button {
+    border: none;
+    background: transparent;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+    padding: 6px 12px;
+}
+
+.preview-toggle .active {
+    background: var(--primary-button-bg);
+    color: var(--primary-button-text);
+}
+
+.select-container {
+    display: inline-block;
+    align-items: center;
+    background: var(--primary-bg-color);
+    padding: 16px 16px;
+    border-radius: 8px;
+    margin: 8px 8px;
+    width: calc(20vw - 48px);
+}
+
+.select-container label {
+    font-weight: bold;
+    margin-right: 32px;
+    color: var(--primary-text-color);
+}
+
+.select-container select {
+    border: none;
+    background: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 10px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s;
+}
+
+.select-container select:hover {
+    background: #eaeaea;
+}
+
+.select-container select:focus {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+

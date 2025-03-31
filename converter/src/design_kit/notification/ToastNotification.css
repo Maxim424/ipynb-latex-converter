@@ -1,0 +1,26 @@
+.toast {
+    position: fixed;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-button-bg);
+    color: var(--primary-button-text);
+    padding: 12px 24px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease, top 0.3s ease;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+.toast.show {
+    top: 20px;
+    opacity: 1;
+}
+
+.toast:hover {
+    background-color: var(--primary-button-bg);
+}

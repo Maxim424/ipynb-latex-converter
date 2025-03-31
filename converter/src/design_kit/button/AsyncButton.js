@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "../styles/AsyncButton.css"
+import "./AsyncButton.css"
 import { BeatLoading } from 'respinner'
 
 const AsyncButton = ({ action, title }) => {
