@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./styles/ProcessPage.css";
 import NotebookCells from "./NotebookCells";
-import AsyncButton from "../../design_kit/button/AsyncButton";
+import AsyncButton from "../../design_kit/async_button/AsyncButton";
+import DropdownButton from "../../design_kit/dropdown_button/DropdownButton";
 
 function ProcessPage({
     fileContent,
@@ -10,7 +11,7 @@ function ProcessPage({
     texContent,
     pdfUrl,
     onConvert,
-    onDownload,
+    handleDownload,
     selectedCells,
     setSelectedCells,
     onCheckboxChange,
@@ -117,7 +118,13 @@ function ProcessPage({
                 <div className="process-settins-column-header">Settings</div>
                 <div className="process-settings">
                     <AsyncButton action={() => onConvert(file)} title="Convert" />
-                    <AsyncButton action={() => onDownload(file)} title="Download" />
+                    <DropdownButton
+                        title="Download"
+                        options={[
+                            { label: "Скачать .tex", action: () => handleDownload(file, "tex") },
+                            { label: "Скачать .pdf", action: () => handleDownload(file, "pdf") }
+                        ]}
+                    />
 
                     <div className="select-container">
                         <label>Cell selection:</label>

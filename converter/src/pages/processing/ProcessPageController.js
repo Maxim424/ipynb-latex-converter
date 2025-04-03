@@ -67,20 +67,42 @@ const ProcessPageController = () => {
         }
     };
 
-    const handleDownload = async (file) => {
+    const handleDownload = async (file, format) => {
         if (!fileId) {
-            showToast("Файл не готов для скачивания!")
+            showToast("Файл не готов для скачивания!");
             return;
         }
 
-        const link = document.createElement("a");
-        link.href = `http://127.0.0.1:8000/download/${fileId}`;
-        link.download = `${file.name.replace(".ipynb", ".tex")}`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
+        const fileExtension = format === "pdf" ? ".pdf" : ".tex";
 
+        if (fileExtension === ".pdf" && pdfUrl) {
+            try {
+                const response = await fetch(pdfUrl);
+                const blob = await response.blob();
+                const blobUrl = URL.createObjectURL(blob);
+
+                const link = document.createElement("a");
+                link.href = blobUrl;
+                link.download = file.name.replace(".ipynb", ".pdf");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Освобождаем память
+                URL.revokeObjectURL(blobUrl);
+            } catch (error) {
+                showToast("Ошибка при скачивании PDF!");
+                console.error("Ошибка скачивания PDF:", error);
+            }
+        } else {
+            const link = document.createElement("a");
+            link.href = `http://127.0.0.1:8000/download/${fileId}`;
+            link.download = file.name.replace(".ipynb", ".tex");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    };
 
     return (
         <ProcessPage
@@ -89,7 +111,7 @@ const ProcessPageController = () => {
             texContent={texContent}
             pdfUrl={pdfUrl}
             onConvert={handleConvert}
-            onDownload={handleDownload}
+            handleDownload={handleDownload}
             selectedCells={selectedCells}
             setSelectedCells={setSelectedCells}
             onCheckboxChange={handleCheckboxChange}

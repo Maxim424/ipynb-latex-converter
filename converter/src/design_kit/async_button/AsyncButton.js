@@ -18,7 +18,7 @@ const AsyncButton = ({ action, title }) => {
             disabled={isLoading}
         >
             {isLoading ? (
-                <BeatLoading fill="#777" borderRadius={4} count={12} />
+                <BeatLoading fill="#007bff80" borderRadius={4} count={3} />
             ) : (
                 title
             )}
