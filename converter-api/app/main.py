@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, Form, UploadFile, HTTPException
+from fastapi import FastAPI, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 import shutil
@@ -52,38 +52,41 @@ async def convert_ipynb(file: UploadFile, selectedCells: str = Form(...)):
     try:
         filter_cells(file_path, selected_cells, output_tex.stem)
     except subprocess.CalledProcessError as e:
-        return JSONResponse(content={"error": "Ошибка конвертации файла."}, status_code=500)
-
-    try:
-        with output_tex.open("r", encoding="utf-8") as tex_file:
-            tex_content = tex_file.read()
-        with output_pdf.open("rb") as pdf_file:
-            pdf_bytes = pdf_file.read()
-    except Exception as e:
-        return JSONResponse(content={"error": "Ошибка чтения файла."}, status_code=500)
+        return JSONResponse(content={"error": "File conversion error"}, status_code=500)
 
     return {
-        "file_id": unique_id,
-        "tex_content": tex_content,
-        "pdf_url": f"/files/{unique_id}.pdf"
+        "file_id": unique_id
     }
 
-@app.get("/download/{file_id}")
-async def download_file(file_id: str):
-    tex_path = UPLOAD_DIR / f"{file_id}.tex"
+@app.get("/preview/{file_name}")
+async def preview_file(file_name: str):
+    file_path = UPLOAD_DIR / file_name
+    if not file_path.exists():
+        return JSONResponse(content={"error": f"File not found. Filename: {file_name}"}, status_code=404)
 
-    if not tex_path.exists():
-        raise HTTPException(status_code=404, detail="Файл не найден")
+    if file_name.endswith(".pdf"):
+        return FileResponse(file_path, media_type="application/pdf")
+    elif file_name.endswith(".tex"):
+        return FileResponse(file_path, media_type="text/plain")
+    else:
+        return JSONResponse(content={"error": "Invalid file format"}, status_code=400)
+
+@app.get("/download/{file_name}")
+async def download_file(file_name: str):
+    file_path = UPLOAD_DIR / file_name
+    if not file_path.exists():
+        return JSONResponse(content={"error": f"File not found. Filename: {file_name}"}, status_code=404)
+
+    if file_name.endswith(".pdf"):
+        media_type = "application/pdf"
+    elif file_name.endswith(".tex"):
+        media_type = "application/x-tex"
+    else:
+        return JSONResponse(content={"error": "Invalid file format"}, status_code=400)
 
     return FileResponse(
-        tex_path,
-        media_type="application/x-tex",
-        filename=f"{file_id}.tex"
+        file_path,
+        media_type=media_type,
+        filename=file_name,
+        headers={"Content-Disposition": f"attachment; filename={file_name}"}
     )
-
-@app.get("/files/{file_name}")
-async def get_file(file_name: str):
-    file_path = UPLOAD_DIR / file_name
-    if file_path.exists():
-        return FileResponse(file_path, media_type='application/pdf')
-    return JSONResponse(content={"error": "Файл не найден."}, status_code=404)

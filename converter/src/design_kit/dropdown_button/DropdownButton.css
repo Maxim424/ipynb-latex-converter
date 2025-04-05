@@ -28,11 +28,13 @@
     width: calc(100% - 28px);
     transition: opacity 0.3s ease, top 0.3s ease;
     opacity: 0;
+    pointer-events: none;
 }
 
 .dropdown-menu.show {
     opacity: 1;
     top: 100%;
+    pointer-events: auto;
 }
 
 .dropdown-item {
@@ -47,5 +49,5 @@
 }
 
 .dropdown-item:hover {
-    background: rgba(0, 123, 255, 0.5);
+    background: #007bff80;
 }

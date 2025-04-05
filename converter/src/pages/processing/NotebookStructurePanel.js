@@ -3,9 +3,9 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import "./styles/NotebookCells.css";
+import "./styles/NotebookStructurePanel.css";
 
-const NotebookCells = ({ jsonString, selectedCells, onCheckboxChange }) => {
+const NotebookStructurePanel = ({ jsonString, selectedCells, onCheckboxChange }) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
 
     useEffect(() => {
@@ -72,4 +72,4 @@ const NotebookCells = ({ jsonString, selectedCells, onCheckboxChange }) => {
     );
 };
 
-export default NotebookCells;
+export default NotebookStructurePanel;

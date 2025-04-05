@@ -1,29 +1,31 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./styles/ProcessPage.css";
-import NotebookCells from "./NotebookCells";
+import NotebookStructurePanel from "./NotebookStructurePanel";
+import PreviewPanel from "./PreviewPanel";
 import AsyncButton from "../../design_kit/async_button/AsyncButton";
 import DropdownButton from "../../design_kit/dropdown_button/DropdownButton";
+import SegmentedControl from "../../design_kit/segmented_control/SegmentedControl";
 
 function ProcessPage({
     fileContent,
     handleFileLoad,
-    texContent,
-    pdfUrl,
     onConvert,
     handleDownload,
     selectedCells,
     setSelectedCells,
     onCheckboxChange,
     selectionMode,
-    setSelectionMode
+    setSelectionMode,
+    previewPdfUrl,
+    previewTexUrl
 }) {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const location = useLocation();
     const file = location.state?.file;
     const fileLoaded = useRef(false);
 
-    const [leftWidth, setLeftWidth] = useState(250); // Начальная ширина левой панели
+    const [leftWidth, setLeftWidth] = useState(350); // Начальная ширина левой панели
     const leftContainerRef = useRef(null);
     const isResizing = useRef(false);
     const [viewMode, setViewMode] = useState("latex"); // 'latex' или 'pdf'
@@ -64,10 +66,10 @@ function ProcessPage({
             setScreenWidth(window.innerWidth); // Обновление ширины при изменении размера экрана
         };
 
-        window.addEventListener("resize", handleResize); // Добавляем слушатель события изменения размера окна
+        window.addEventListener("resize", handleResize);
 
         return () => {
-            window.removeEventListener("resize", handleResize); // Убираем слушатель при размонтировании компонента
+            window.removeEventListener("resize", handleResize);
         };
     }, [file, handleFileLoad]);
 
@@ -140,49 +142,30 @@ function ProcessPage({
             </div>
             <div ref={leftContainerRef} className="process-file-structure-column" style={{ width: leftWidth }}>
                 <div className="process-file-structure-column-header">Notebook cells</div>
-                <NotebookCells jsonString={fileContent} selectedCells={selectedCells} onCheckboxChange={onCheckboxChange} />
+                <NotebookStructurePanel
+                    jsonString={fileContent}
+                    selectedCells={selectedCells}
+                    onCheckboxChange={onCheckboxChange}
+                />
             </div>
             <div className="resizer" onMouseDown={handleMouseDown} />
             <div className="process-preview-column" style={{ width: 0.8 * screenWidth - leftWidth - 16 }}>
                 <div className="process-preview-column-header">
                     <span>Preview</span>
-
-                    {/* Переключатель */}
-                    <div className="preview-toggle">
-                        <button
-                            className={viewMode === "latex" ? "active" : ""}
-                            onClick={() => setViewMode("latex")}
-                        >
-                            LaTeX
-                        </button>
-                        <button
-                            className={viewMode === "pdf" ? "active" : ""}
-                            onClick={() => setViewMode("pdf")}
-                        >
-                            PDF
-                        </button>
-                    </div>
+                    <SegmentedControl
+                        options={[
+                            { label: "LaTeX", value: "latex" },
+                            { label: "PDF", value: "pdf" }
+                        ]}
+                        selected={viewMode}
+                        onChange={setViewMode}
+                    />
                 </div>
-                {viewMode === "latex" ? (
-                    <pre
-                        style={{
-                            whiteSpace: "pre-wrap",
-                            wordWrap: "break-word",
-                            padding: "0px 16px",
-                        }}
-                    >
-                        {texContent}
-                    </pre>
-                ) : (
-                    pdfUrl && (
-                        <iframe
-                            src={pdfUrl}
-                            width="calc(100% - 16px)"
-                            height="100%"
-                            title="Generated PDF"
-                        ></iframe>
-                    )
-                )}
+                <PreviewPanel
+                    viewMode={viewMode}
+                    previewTexUrl={previewTexUrl}
+                    previewPdfUrl={previewPdfUrl}
+                />
             </div>
         </div>
     );
