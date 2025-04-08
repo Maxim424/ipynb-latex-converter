@@ -43,3 +43,26 @@
     border-radius: 6px;
     margin: 4px 4px;
 }
+
+.execution-result-header {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    gap: 8px;
+}
+
+.execution-result-checkbox {
+    width: 20px;
+    height: 20px;
+}
+
+.execution-result-container {
+    padding: 8px;
+    border-radius: 8px;
+    margin: 0px;
+    overflow-x: scroll;
+}
+
+.execution-result-container::-webkit-scrollbar {
+    display: none;
+}

@@ -6,7 +6,8 @@ const ProcessPageController = () => {
     const [fileContent, setFileContent] = useState("");
     const [fileId, setFileId] = useState("");
     const [selectedCells, setSelectedCells] = useState([]);
-    const [selectionMode, setSelectionMode] = useState("custom");
+    const [selectionMode, setSelectionMode] = useState("all");
+    const [outputSelectionMode, setOutputSelectionMode] = useState("all");
     const [previewPdfUrl, setPreviewPdfUrl] = useState("");
     const [previewTexUrl, setPreviewTexUrl] = useState("");
 
@@ -16,7 +17,14 @@ const ProcessPageController = () => {
     const handleFileLoad = (fileContent) => {
         try {
             const notebook = JSON.parse(fileContent);
-            const allCellIndices = notebook.cells ? notebook.cells.map((_, index) => index) : [];
+
+            const allCellIndices = notebook.cells ?
+                notebook.cells.map((_, index) => ({
+                    index: index,
+                    includeSource: true,
+                    includeResults: true
+                })) : [];
+
             setSelectedCells(allCellIndices);
             setFileContent(fileContent);
         } catch (error) {
@@ -24,15 +32,53 @@ const ProcessPageController = () => {
         }
     };
 
-    const handleCheckboxChange = (cellIndex) => {
-        setSelectedCells((prevSelected) => {
-            const updated = prevSelected.includes(cellIndex)
-                ? prevSelected.filter((index) => index !== cellIndex)
-                : [...prevSelected, cellIndex];
-            return updated.sort((a, b) => a - b);
+    const handleCellToggle = (cellIndex) => {
+        setSelectedCells((prev) => {
+            const existing = prev.find(cell => cell.index === cellIndex);
+
+            if (existing) {
+                // Переключаем includeSource
+                const updated = {
+                    ...existing,
+                    includeSource: !existing.includeSource
+                };
+
+                // Если ни код, ни вывод не выбраны — убираем вообще
+                if (!updated.includeSource && !updated.includeResults) {
+                    return prev.filter(cell => cell.index !== cellIndex);
+                }
+
+                return prev.map(cell => cell.index === cellIndex ? updated : cell);
+            } else {
+                // Добавляем новую запись с кодом, без вывода
+                return [...prev, { index: cellIndex, includeSource: true, includeResults: false }];
+            }
         });
 
-        // Если пользователь вручную меняет чекбоксы – переключаемся в "custom"
+        setSelectionMode("custom");
+    };
+
+    const handleOutputToggle = (cellIndex) => {
+        setSelectedCells((prev) => {
+            const existing = prev.find(cell => cell.index === cellIndex);
+
+            if (existing) {
+                const updated = {
+                    ...existing,
+                    includeResults: !existing.includeResults
+                };
+
+                if (!updated.includeSource && !updated.includeResults) {
+                    return prev.filter(cell => cell.index !== cellIndex);
+                }
+
+                return prev.map(cell => cell.index === cellIndex ? updated : cell);
+            } else {
+                // Если до этого не было — добавляем только output
+                return [...prev, { index: cellIndex, includeSource: false, includeResults: true }];
+            }
+        });
+
         setSelectionMode("custom");
     };
 
@@ -98,9 +144,12 @@ const ProcessPageController = () => {
             handleDownload={handleDownload}
             selectedCells={selectedCells}
             setSelectedCells={setSelectedCells}
-            onCheckboxChange={handleCheckboxChange}
+            handleCellToggle={handleCellToggle}
+            handleOutputToggle={handleOutputToggle}
             selectionMode={selectionMode}
             setSelectionMode={setSelectionMode}
+            outputSelectionMode={outputSelectionMode}
+            setOutputSelectionMode={setOutputSelectionMode}
             previewPdfUrl={previewPdfUrl}
             previewTexUrl={previewTexUrl}
         />

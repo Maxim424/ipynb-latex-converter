@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./styles/ProcessPage.css";
+import ControlsPanel from "./ControlsPanel";
 import NotebookStructurePanel from "./NotebookStructurePanel";
 import PreviewPanel from "./PreviewPanel";
-import AsyncButton from "../../design_kit/async_button/AsyncButton";
-import DropdownButton from "../../design_kit/dropdown_button/DropdownButton";
 import SegmentedControl from "../../design_kit/segmented_control/SegmentedControl";
 
 function ProcessPage({
@@ -14,9 +13,12 @@ function ProcessPage({
     handleDownload,
     selectedCells,
     setSelectedCells,
-    onCheckboxChange,
+    handleCellToggle,
+    handleOutputToggle,
     selectionMode,
     setSelectionMode,
+    outputSelectionMode,
+    setOutputSelectionMode,
     previewPdfUrl,
     previewTexUrl
 }) {
@@ -85,59 +87,22 @@ function ProcessPage({
 
     const cells = parseCells(fileContent);
 
-    const updateSelection = (mode) => {
-        setSelectionMode(mode);
-
-        switch (mode) {
-            case "all":
-                setSelectedCells(cells.map((_, index) => index)); // Все ячейки
-                break;
-            case "code":
-                setSelectedCells(
-                    cells
-                        .map((cell, index) => (cell.cell_type === "code" ? index : null))
-                        .filter((index) => index !== null)
-                );
-                break;
-            case "text":
-                setSelectedCells(
-                    cells
-                        .map((cell, index) => (cell.cell_type === "markdown" ? index : null))
-                        .filter((index) => index !== null)
-                );
-                break;
-            case "custom":
-                // Оставляем selectedCells как есть
-                break;
-            default:
-                break;
-        }
-    };
-
     return (
         <div className="process-parent-container">
             <div className="process-settings-column">
                 <div className="process-settins-column-header">Settings</div>
                 <div className="process-settings">
-                    <AsyncButton action={() => onConvert(file)} title="Convert" />
-                    <DropdownButton
-                        title="Download"
-                        options={[
-                            { label: "Скачать .tex", action: () => handleDownload(file, "tex") },
-                            { label: "Скачать .pdf", action: () => handleDownload(file, "pdf") }
-                        ]}
+                    <ControlsPanel
+                        file={file}
+                        onConvert={onConvert}
+                        handleDownload={handleDownload}
+                        selectionMode={selectionMode}
+                        setSelectionMode={setSelectionMode}
+                        outputSelectionMode={outputSelectionMode}
+                        setOutputSelectionMode={setOutputSelectionMode}
+                        setSelectedCells={setSelectedCells}
+                        cells={cells}
                     />
-
-                    <div className="select-container">
-                        <label>Cell selection:</label>
-                        <select value={selectionMode} onChange={(e) => updateSelection(e.target.value)}>
-                            <option value="all">All</option>
-                            <option value="code">Code</option>
-                            <option value="text">Text</option>
-                            <option value="custom">Custom</option>
-                        </select>
-                    </div>
-
                 </div>
             </div>
             <div ref={leftContainerRef} className="process-file-structure-column" style={{ width: leftWidth }}>
@@ -145,7 +110,8 @@ function ProcessPage({
                 <NotebookStructurePanel
                     jsonString={fileContent}
                     selectedCells={selectedCells}
-                    onCheckboxChange={onCheckboxChange}
+                    handleCellToggle={handleCellToggle}
+                    handleOutputToggle={handleOutputToggle}
                 />
             </div>
             <div className="resizer" onMouseDown={handleMouseDown} />

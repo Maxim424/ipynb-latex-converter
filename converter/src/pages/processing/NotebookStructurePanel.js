@@ -5,7 +5,12 @@ import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import "./styles/NotebookStructurePanel.css";
 
-const NotebookStructurePanel = ({ jsonString, selectedCells, onCheckboxChange }) => {
+const NotebookStructurePanel = ({
+    jsonString,
+    selectedCells,
+    handleCellToggle,
+    handleOutputToggle
+}) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
 
     useEffect(() => {
@@ -28,6 +33,32 @@ const NotebookStructurePanel = ({ jsonString, selectedCells, onCheckboxChange })
 
     const cells = parseCells(jsonString);
 
+    const renderOutputs = (outputs) => {
+        return outputs.map((output, idx) => {
+            switch (output.output_type) {
+                case 'stream':
+                    return (
+                        <pre key={idx} className="execution-result-container">
+                            {output.text.join('')}
+                        </pre>
+                    );
+                case 'display_data':
+                    return (
+                        <div key={idx} className="execution-result-container">
+                            {output.data['text/plain'] && (
+                                <pre>{output.data['text/plain'].join('')}</pre>
+                            )}
+                            {output.data['image/png'] && (
+                                <img src={`data:image/png;base64,${output.data['image/png']}`} alt="Execution Output" />
+                            )}
+                        </div>
+                    );
+                default:
+                    return null;
+            }
+        })
+    };
+
     return (
         <div className="scroll-parent-container">
             {cells.length === 0 ? (
@@ -39,9 +70,8 @@ const NotebookStructurePanel = ({ jsonString, selectedCells, onCheckboxChange })
                             <label className="cell-header-container">
                                 <input
                                     type="checkbox"
-                                    checked={selectedCells.includes(index)}
-                                    className="cell-checkbox"
-                                    onChange={() => onCheckboxChange(index)}
+                                    checked={selectedCells.find(cell => cell.index === index)?.includeSource || false}
+                                    onChange={() => handleCellToggle(index)}
                                 />
                                 <span style={{ fontWeight: "bold" }}>
                                     {cell.cell_type.toUpperCase()}
@@ -61,6 +91,21 @@ const NotebookStructurePanel = ({ jsonString, selectedCells, onCheckboxChange })
                                         >
                                             {cell.source.join("")}
                                         </SyntaxHighlighter>
+                                        {cell.outputs.length > 0 && (
+                                            <div>
+                                                <div className="execution-result-header">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedCells.find(cell => cell.index === index)?.includeResults || false}
+                                                        onChange={() => handleOutputToggle(index)}
+                                                    />
+                                                    <span>OUTPUT</span>
+                                                </div>
+                                                <div className="execution-result-container">
+                                                    {renderOutputs(cell.outputs)}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
