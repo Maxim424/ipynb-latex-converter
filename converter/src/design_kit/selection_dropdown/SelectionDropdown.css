@@ -2,15 +2,13 @@
     display: inline-block;
     align-items: center;
     background: var(--primary-bg-color);
-    padding: 16px 16px;
-    border-radius: 8px;
-    margin: 8px 8px;
+    padding: 8px 0px;
     width: calc(20vw - 48px);
 }
 
 .select-container label {
-    font-weight: bold;
-    margin-right: 32px;
+    font-weight: normal;
+    margin-right: 8px;
     color: var(--primary-text-color);
 }
 

@@ -5,11 +5,14 @@ import { useToast } from "../../design_kit/notification/ToastContext";
 const ProcessPageController = () => {
     const [fileContent, setFileContent] = useState("");
     const [fileId, setFileId] = useState("");
+    const [previewPdfUrl, setPreviewPdfUrl] = useState("");
+    const [previewTexUrl, setPreviewTexUrl] = useState("");
+
     const [selectedCells, setSelectedCells] = useState([]);
     const [selectionMode, setSelectionMode] = useState("all");
     const [outputSelectionMode, setOutputSelectionMode] = useState("all");
-    const [previewPdfUrl, setPreviewPdfUrl] = useState("");
-    const [previewTexUrl, setPreviewTexUrl] = useState("");
+
+    const [codeBg, setCodeBg] = useState("#f6f8fa");
 
     const { showToast } = useToast();
     const baseUrl = "http://127.0.0.1:8000/";
@@ -91,6 +94,7 @@ const ProcessPageController = () => {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("selectedCells", JSON.stringify(selectedCells));
+        formData.append("codeBg", codeBg);
 
         try {
             const response = await fetch(`${baseUrl}convert/`, {
@@ -152,6 +156,8 @@ const ProcessPageController = () => {
             setOutputSelectionMode={setOutputSelectionMode}
             previewPdfUrl={previewPdfUrl}
             previewTexUrl={previewTexUrl}
+            codeBg={codeBg}
+            setCodeBg={setCodeBg}
         />
     );
 };

@@ -17,6 +17,10 @@
     width: 100%;
 }
 
+.dropdown-button:hover {
+    background: var(--primary-button-bg-hover);
+}
+
 .dropdown-menu {
     position: absolute;
     top: 60%;
@@ -49,5 +53,5 @@
 }
 
 .dropdown-item:hover {
-    background: #007bff80;
+    background: var(--primary-button-bg-hover);
 }

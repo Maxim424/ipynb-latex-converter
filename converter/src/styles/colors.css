@@ -1,9 +1,10 @@
 :root {
     --primary-bg-color: rgb(255, 255, 255);
-    --secondary-bg-color: rgb(242, 242, 242);
+    --secondary-bg-color: #f2f2f2;
     --primary-text-color: rgb(0, 0, 0);
     --secondary-text-color: rgb(152, 152, 152);
     --primary-button-bg: rgb(0, 0, 0);
+    --primary-button-bg-hover: rgb(50, 50, 50);
     --primary-button-text: rgb(255, 255, 255);
 }
 
@@ -14,6 +15,7 @@
         --primary-text-color: rgb(255, 255, 255);
         --secondary-text-color: rgb(127, 127, 127);
         --primary-button-bg: rgb(255, 255, 255);
+        --primary-button-bg-hover: rgb(205, 205, 205);
         --primary-button-text: rgb(0, 0, 0);
     }
 }

@@ -40,6 +40,10 @@
     cursor: pointer;
 }
 
+.file-label:hover {
+    background: var(--primary-button-bg-hover);
+}
+
 .file-input {
     display: none;
 }

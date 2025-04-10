@@ -20,7 +20,9 @@ function ProcessPage({
     outputSelectionMode,
     setOutputSelectionMode,
     previewPdfUrl,
-    previewTexUrl
+    previewTexUrl,
+    codeBg,
+    setCodeBg
 }) {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const location = useLocation();
@@ -102,6 +104,8 @@ function ProcessPage({
                         setOutputSelectionMode={setOutputSelectionMode}
                         setSelectedCells={setSelectedCells}
                         cells={cells}
+                        codeBg={codeBg}
+                        setCodeBg={setCodeBg}
                     />
                 </div>
             </div>

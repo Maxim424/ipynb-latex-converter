@@ -4,6 +4,7 @@
     overflow: hidden;
     margin-left: 16px;
     background: #999;
+    gap: 8px;
 }
 
 .segmented-control button {
@@ -20,4 +21,8 @@
 .segmented-control button.active {
     background: var(--primary-button-bg);
     color: var(--primary-button-text);
+}
+
+.segmented-control button:hover {
+    background: var(--primary-button-bg-hover);
 }

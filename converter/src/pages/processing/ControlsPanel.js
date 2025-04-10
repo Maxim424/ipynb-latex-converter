@@ -2,6 +2,7 @@ import React from "react";
 import AsyncButton from "../../design_kit/async_button/AsyncButton";
 import DropdownButton from "../../design_kit/dropdown_button/DropdownButton";
 import SelectionDropdown from "../../design_kit/selection_dropdown/SelectionDropdown";
+import ColorPicker from "../../design_kit/color_picker/ColorPicker";
 import "./styles/ControlsPanel.css";
 
 const ControlsPanel = ({
@@ -13,7 +14,9 @@ const ControlsPanel = ({
     outputSelectionMode,
     setOutputSelectionMode,
     setSelectedCells,
-    cells
+    cells,
+    codeBg,
+    setCodeBg
 }) => {
     const updateSelectionMode = (mode) => {
         setSelectionMode(mode);
@@ -104,37 +107,50 @@ const ControlsPanel = ({
 
     return (
         <div className="controls-panel">
-            <AsyncButton action={() => onConvert(file)} title="Convert" />
+            <AsyncButton action={() => onConvert(file)} title="Сконвертировать" />
             <DropdownButton
-                title="Download"
+                title="Скачать"
                 options={[
                     { label: "Скачать .tex", action: () => handleDownload(file, "tex") },
                     { label: "Скачать .pdf", action: () => handleDownload(file, "pdf") }
                 ]}
             />
 
-            <SelectionDropdown
-                label="Cell selection:"
-                value={selectionMode}
-                onChange={updateSelectionMode}
-                options={[
-                    { label: "All", value: "all" },
-                    { label: "Code", value: "code" },
-                    { label: "Text", value: "text" },
-                    { label: "Custom", value: "custom" }
-                ]}
-            />
+            <div className="block-container">
+                <label className="block-label">
+                    Выбор ячеек для конвертации
+                </label>
 
-            <SelectionDropdown
-                label="Output selection:"
-                value={outputSelectionMode}
-                onChange={updateOutputSelectionMode}
-                options={[
-                    { label: "Include all", value: "all" },
-                    { label: "Exclude all", value: "none" },
-                    { label: "Custom", value: "custom" }
-                ]}
-            />
+                <SelectionDropdown
+                    label="Тип ячейки:"
+                    value={selectionMode}
+                    onChange={updateSelectionMode}
+                    options={[
+                        { label: "Все", value: "all" },
+                        { label: "Код", value: "code" },
+                        { label: "Текст", value: "text" },
+                        { label: "Custom", value: "custom" }
+                    ]}
+                />
+
+                <SelectionDropdown
+                    label="Вывод кодовых ячеек:"
+                    value={outputSelectionMode}
+                    onChange={updateOutputSelectionMode}
+                    options={[
+                        { label: "Включить", value: "all" },
+                        { label: "Исключить", value: "none" },
+                        { label: "Custom", value: "custom" }
+                    ]}
+                />
+            </div>
+
+            <div className="block-container">
+                <label className="block-label">
+                    Форматирование
+                </label>
+                <ColorPicker title="Цвет фона ячеек:" value={codeBg} onChange={(e) => setCodeBg(e)} />
+            </div>
         </div>
     );
 };

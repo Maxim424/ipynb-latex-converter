@@ -1,0 +1,9 @@
+.picker-label {
+    font-weight: normal;
+    margin-right: 8px;
+    color: var(--primary-text-color);
+}
+
+.picker-input {
+    width: 80px;
+}

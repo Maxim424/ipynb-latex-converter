@@ -17,3 +17,7 @@
     cursor: not-allowed;
     background-color: var(--primary-button-bg);
 }
+
+.async-button:hover {
+    background: var(--primary-button-bg-hover);
+}
