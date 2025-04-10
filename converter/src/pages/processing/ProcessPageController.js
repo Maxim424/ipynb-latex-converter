@@ -13,6 +13,7 @@ const ProcessPageController = () => {
     const [outputSelectionMode, setOutputSelectionMode] = useState("all");
 
     const [codeBg, setCodeBg] = useState("#f6f8fa");
+    const [includeCellNumbers, setIncludeCellNumbers] = useState("true");
 
     const { showToast } = useToast();
     const baseUrl = "http://127.0.0.1:8000/";
@@ -95,6 +96,7 @@ const ProcessPageController = () => {
         formData.append("file", file);
         formData.append("selectedCells", JSON.stringify(selectedCells));
         formData.append("codeBg", codeBg);
+        formData.append("includeCellNumbers", includeCellNumbers)
 
         try {
             const response = await fetch(`${baseUrl}convert/`, {
@@ -158,6 +160,8 @@ const ProcessPageController = () => {
             previewTexUrl={previewTexUrl}
             codeBg={codeBg}
             setCodeBg={setCodeBg}
+            includeCellNumbers={includeCellNumbers}
+            setIncludeCellNumbers={setIncludeCellNumbers}
         />
     );
 };

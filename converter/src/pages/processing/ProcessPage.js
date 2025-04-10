@@ -22,7 +22,9 @@ function ProcessPage({
     previewPdfUrl,
     previewTexUrl,
     codeBg,
-    setCodeBg
+    setCodeBg,
+    includeCellNumbers,
+    setIncludeCellNumbers
 }) {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const location = useLocation();
@@ -106,6 +108,8 @@ function ProcessPage({
                         cells={cells}
                         codeBg={codeBg}
                         setCodeBg={setCodeBg}
+                        includeCellNumbers={includeCellNumbers}
+                        setIncludeCellNumbers={setIncludeCellNumbers}
                     />
                 </div>
             </div>

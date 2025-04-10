@@ -3,7 +3,7 @@ import "./ColorPicker.css";
 
 const ColorPicker = ({ title, value, onChange }) => {
     return (
-        <div>
+        <div className="picker-container">
             <label className="picker-label">{title}</label>
             <input className="picker-input"
                 type="color"

@@ -16,7 +16,9 @@ const ControlsPanel = ({
     setSelectedCells,
     cells,
     codeBg,
-    setCodeBg
+    setCodeBg,
+    includeCellNumbers,
+    setIncludeCellNumbers
 }) => {
     const updateSelectionMode = (mode) => {
         setSelectionMode(mode);
@@ -149,6 +151,17 @@ const ControlsPanel = ({
                 <label className="block-label">
                     Форматирование
                 </label>
+
+                <SelectionDropdown
+                    label="Номера ячеек:"
+                    value={includeCellNumbers}
+                    onChange={setIncludeCellNumbers}
+                    options={[
+                        { label: "Включить", value: "true" },
+                        { label: "Исключить", value: "false" }
+                    ]}
+                />
+
                 <ColorPicker title="Цвет фона ячеек:" value={codeBg} onChange={(e) => setCodeBg(e)} />
             </div>
         </div>

@@ -29,7 +29,7 @@ def html_to_rgb(color: str) -> str:
     return f"{r},{g},{b}"
 
 
-def filter_cells(input_file, selected_cells, output_file, code_bg, text_bg, output_bg, remove_prompt_numbers=True):
+def filter_cells(input_file, selected_cells, output_file, code_bg, text_bg, output_bg, remove_prompt_numbers):
     input_file = Path(input_file)
     output_file = Path(output_file)
 
@@ -127,13 +127,16 @@ async def convert_ipynb(
     selectedCells: str = Form(...),
     codeBg: str = Form("#f6f8fa"),
     textBg: str = Form("#ffffff"),
-    outputBg: str = Form("#f9f2f4")
+    outputBg: str = Form("#f9f2f4"),
+    includeCellNumbers: str = Form("true")
 ):
     unique_id = str(uuid.uuid4())
     file_extension = file.filename.split(".")[-1]
     file_path = UPLOAD_DIR / f"{unique_id}.{file_extension}"
     output_tex = UPLOAD_DIR / f"{unique_id}.tex"
     output_pdf = UPLOAD_DIR / f"{unique_id}.pdf"
+
+    remove_prompt_numbers = includeCellNumbers != "true"
 
     with file_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
@@ -142,7 +145,7 @@ async def convert_ipynb(
 
     try:
         filter_cells(file_path, selected_cells,
-                     output_tex.stem, codeBg, textBg, outputBg)
+                     output_tex.stem, codeBg, textBg, outputBg, remove_prompt_numbers)
     except subprocess.CalledProcessError as e:
         if output_tex.exists() and output_pdf.exists():
             return {

@@ -1,3 +1,7 @@
+.picker-container {
+    margin: 8px 0px;
+}
+
 .picker-label {
     font-weight: normal;
     margin-right: 8px;
