@@ -18,21 +18,36 @@ const ProcessPageController = () => {
     const { showToast } = useToast();
     const baseUrl = "http://127.0.0.1:8000/";
 
-    const handleFileLoad = (fileContent) => {
+    const handleFileLoad = async (files) => {
         try {
-            const notebook = JSON.parse(fileContent);
+            let allCells = [];
+            let selected = [];
+            let totalIndex = 0;
 
-            const allCellIndices = notebook.cells ?
-                notebook.cells.map((_, index) => ({
-                    index: index,
-                    includeSource: true,
-                    includeResults: true
-                })) : [];
+            for (const file of files) {
+                const content = await file.text();
+                const notebook = JSON.parse(content);
 
-            setSelectedCells(allCellIndices);
-            setFileContent(fileContent);
+                const cells = notebook.cells || [];
+
+                const fileCells = cells.map((cell, index) => {
+                    selected.push({
+                        index: totalIndex + index,
+                        includeSource: true,
+                        includeResults: true
+                    });
+                    return cell;
+                });
+
+                allCells = allCells.concat(fileCells);
+                totalIndex += cells.length;
+            }
+
+            setSelectedCells(selected);
+            setFileContent(JSON.stringify({ cells: allCells }));
+
         } catch (error) {
-            showToast("Ошибка при чтении файла")
+            showToast("Ошибка при чтении файлов");
         }
     };
 
@@ -86,36 +101,43 @@ const ProcessPageController = () => {
         setSelectionMode("custom");
     };
 
-    const handleConvert = async (file) => {
-        if (!file) {
-            showToast("Сначала необходимо выбрать файл");
+    const handleConvert = async (files, mergeMode = "single") => {
+        if (!files || files.length === 0) {
+            showToast("Сначала необходимо выбрать файл(ы)");
             return;
         }
-
+    
         const formData = new FormData();
-        formData.append("file", file);
+    
+        // Добавляем все файлы в formData
+        files.forEach((file) => {
+            formData.append("files", file);
+        });
+    
+        // Прочие параметры
         formData.append("selectedCells", JSON.stringify(selectedCells));
         formData.append("codeBg", codeBg);
-        formData.append("includeCellNumbers", includeCellNumbers)
-
+        formData.append("includeCellNumbers", includeCellNumbers);
+        formData.append("mergeMode", mergeMode); // "single" или "include"
+    
         try {
             const response = await fetch(`${baseUrl}convert/`, {
                 method: "POST",
                 body: formData,
             });
-
+    
             if (response.ok) {
                 const data = await response.json();
                 setFileId(data.file_id);
                 setPreviewPdfUrl(`${baseUrl}preview/${data.file_id}.pdf`);
                 setPreviewTexUrl(`${baseUrl}preview/${data.file_id}.tex`);
             } else {
-                showToast("Ошибка конвертации файла!");
+                showToast("Ошибка конвертации файла(ов)!");
             }
         } catch (error) {
-            showToast(`Ошибка ${error}`);
+            showToast(`Ошибка: ${error}`);
         }
-    };
+    };    
 
     const handleDownload = async (file, format) => {
         if (!fileId) {

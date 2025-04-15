@@ -4,25 +4,18 @@ import "./HomePage.css";
 import { useToast } from "../../design_kit/notification/ToastContext";
 
 function HomePage() {
-  const [file, setFile] = useState(null);
   const navigate = useNavigate();
   const { showToast } = useToast();
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
+    const selectedFiles = Array.from(event.target.files);
 
-    if (!selectedFile) {
-      showToast("Файл не выбран!");
+    if (selectedFiles.length === 0) {
+      showToast("Файлы не выбраны!");
       return;
     }
-
-    if (!selectedFile.name.endsWith(".ipynb")) {
-      showToast("Можно загружать только файлы .ipynb!");
-      return;
-    }
-
-    setFile(selectedFile);
-    navigate("/process", { state: { file: selectedFile } });
+    
+    navigate("/process", { state: { files: selectedFiles } });
   };
 
   return (
@@ -41,6 +34,7 @@ function HomePage() {
             type="file"
             className="file-input"
             accept=".ipynb"
+            multiple
             onChange={handleFileChange}
           />
         </div>

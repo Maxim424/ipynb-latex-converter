@@ -5,6 +5,7 @@ import ControlsPanel from "./ControlsPanel";
 import NotebookStructurePanel from "./NotebookStructurePanel";
 import PreviewPanel from "./PreviewPanel";
 import SegmentedControl from "../../design_kit/segmented_control/SegmentedControl";
+import { useToast } from "../../design_kit/notification/ToastContext";
 
 function ProcessPage({
     fileContent,
@@ -28,9 +29,11 @@ function ProcessPage({
 }) {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const location = useLocation();
-    const file = location.state?.file;
-    const fileLoaded = useRef(false);
+    const files = location.state?.files || [];
+    const filesLoaded = useRef(false);
+    const { showToast } = useToast();
 
+    const [currentFile, setCurrentFile] = useState(0);
     const [leftWidth, setLeftWidth] = useState(350); // Начальная ширина левой панели
     const leftContainerRef = useRef(null);
     const isResizing = useRef(false);
@@ -61,13 +64,20 @@ function ProcessPage({
         }
     };
 
-    useEffect(() => {
-        if (file && !fileLoaded.current) {
-            const reader = new FileReader();
-            reader.onload = (e) => handleFileLoad(e.target.result);
-            reader.readAsText(file);
-            fileLoaded.current = true;
+    const loadSelectedFile = async () => {
+        try {
+            await handleFileLoad(files);
+            filesLoaded.current = true
+        } catch (error) {
+            showToast("Ошибка при загрузке файла");
         }
+    };
+
+    useEffect(() => {    
+        if (files.length > 0 && !filesLoaded.current) {
+            loadSelectedFile();
+        }
+        
         const handleResize = () => {
             setScreenWidth(window.innerWidth); // Обновление ширины при изменении размера экрана
         };
@@ -77,7 +87,7 @@ function ProcessPage({
         return () => {
             window.removeEventListener("resize", handleResize);
         };
-    }, [file, handleFileLoad]);
+    }, [files, currentFile, handleFileLoad, loadSelectedFile]);
 
     const parseCells = (jsonString) => {
         try {
@@ -97,7 +107,10 @@ function ProcessPage({
                 <div className="process-settins-column-header">Settings</div>
                 <div className="process-settings">
                     <ControlsPanel
-                        file={file}
+                        files={files}
+                        currentFile={currentFile}
+                        setCurrentFile={setCurrentFile}
+                        loadSelectedFile={loadSelectedFile}
                         onConvert={onConvert}
                         handleDownload={handleDownload}
                         selectionMode={selectionMode}

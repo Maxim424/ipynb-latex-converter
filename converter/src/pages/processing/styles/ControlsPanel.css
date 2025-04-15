@@ -8,6 +8,7 @@
 .block-container {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
     font-weight: bolder;
     background-color: var(--primary-bg-color);
     padding: 16px;
@@ -20,4 +21,11 @@
     color: var(--primary-text-color);
     margin-bottom: 16px;
     font-size: 16px;
+}
+
+.block-description {
+    color: var(--primary-text-color);
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: normal;
 }

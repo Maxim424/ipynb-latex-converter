@@ -14,15 +14,22 @@ def convert_file(input_file, selected_cells, output_file, code_bg, text_bg, outp
     with open(input_file, 'r', encoding='utf-8') as f:
         notebook = json.load(f)
 
-    notebook["cells"] = [
-        {
+    filtered_cells = []
+    for i, cell in enumerate(notebook.get("cells", [])):
+        match = next((c for c in selected_cells if c.get("index") == i), None)
+        if not match:
+            continue
+
+        include_source = match.get("includeSource", False)
+        include_results = match.get("includeResults", False)
+
+        filtered_cells.append({
             **cell,
-            "source": cell["source"] if match.get("includeSource", False) else [],
-            "outputs": cell["outputs"] if match.get("includeResults", False) else []
-        }
-        for i, cell in enumerate(notebook.get("cells", []))
-        if (match := next((c for c in selected_cells if c["index"] == i), None))
-    ]
+            "source": cell.get("source", []) if include_source else [],
+            "outputs": cell.get("outputs", []) if include_results else []
+        })
+
+    notebook["cells"] = filtered_cells
 
     with open(temp_ipynb, 'w', encoding='utf-8') as f:
         json.dump(notebook, f)
@@ -43,6 +50,7 @@ def convert_file(input_file, selected_cells, output_file, code_bg, text_bg, outp
     with open(output_tex, 'w', encoding='utf-8') as f:
         f.write(tex)
 
+    print(f"❗️ {output_file}")
     subprocess.run([
         "xelatex",
         "-interaction=nonstopmode",

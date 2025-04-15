@@ -6,7 +6,10 @@ import ColorPicker from "../../design_kit/color_picker/ColorPicker";
 import "./styles/ControlsPanel.css";
 
 const ControlsPanel = ({
-    file,
+    files,
+    currentFile,
+    setCurrentFile,
+    loadSelectedFile,
     onConvert,
     handleDownload,
     selectionMode,
@@ -20,6 +23,14 @@ const ControlsPanel = ({
     includeCellNumbers,
     setIncludeCellNumbers
 }) => {
+    const updateCurrentFile = (fileName) => {
+        const index = files.findIndex(file => file.name === fileName);
+        if (index !== -1) {
+            setCurrentFile(index);
+            loadSelectedFile();
+        }
+    };
+
     const updateSelectionMode = (mode) => {
         setSelectionMode(mode);
 
@@ -109,14 +120,26 @@ const ControlsPanel = ({
 
     return (
         <div className="controls-panel">
-            <AsyncButton action={() => onConvert(file)} title="Сконвертировать" />
+            <AsyncButton action={() => onConvert(files)} title="Сконвертировать" />
             <DropdownButton
                 title="Скачать"
                 options={[
-                    { label: "Скачать .tex", action: () => handleDownload(file, "tex") },
-                    { label: "Скачать .pdf", action: () => handleDownload(file, "pdf") }
+                    { label: "Скачать .tex", action: () => handleDownload(files[currentFile], "tex") },
+                    { label: "Скачать .pdf", action: () => handleDownload(files[currentFile], "pdf") }
                 ]}
             />
+
+            <div className="block-container">
+                <label className="block-label">
+                    Файлы для конвертации
+                </label>
+
+                {files.map((file, index) => (
+                    <span key={index} className="block-description">
+                        {file.name}
+                    </span>
+                ))}
+            </div>
 
             <div className="block-container">
                 <label className="block-label">
