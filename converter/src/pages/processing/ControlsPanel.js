@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import AsyncButton from "../../design_kit/async_button/AsyncButton";
 import DropdownButton from "../../design_kit/dropdown_button/DropdownButton";
 import SelectionDropdown from "../../design_kit/selection_dropdown/SelectionDropdown";
@@ -23,13 +23,7 @@ const ControlsPanel = ({
     includeCellNumbers,
     setIncludeCellNumbers
 }) => {
-    const updateCurrentFile = (fileName) => {
-        const index = files.findIndex(file => file.name === fileName);
-        if (index !== -1) {
-            setCurrentFile(index);
-            loadSelectedFile();
-        }
-    };
+    const [mergeMode, setMergeMode] = useState("single");
 
     const updateSelectionMode = (mode) => {
         setSelectionMode(mode);
@@ -120,7 +114,7 @@ const ControlsPanel = ({
 
     return (
         <div className="controls-panel">
-            <AsyncButton action={() => onConvert(files)} title="Сконвертировать" />
+            <AsyncButton action={() => onConvert(files, mergeMode)} title="Сконвертировать" />
             <DropdownButton
                 title="Скачать"
                 options={[
@@ -129,17 +123,29 @@ const ControlsPanel = ({
                 ]}
             />
 
-            <div className="block-container">
-                <label className="block-label">
-                    Файлы для конвертации
-                </label>
+            {files.length > 1 && (
+                <div className="block-container">
+                    <label className="block-label">
+                        Файлы для конвертации
+                    </label>
 
-                {files.map((file, index) => (
-                    <span key={index} className="block-description">
-                        {file.name}
-                    </span>
-                ))}
-            </div>
+                    {files.map((file, index) => (
+                        <span key={index} className="block-description">
+                            {file.name}
+                        </span>
+                    ))}
+
+                    <SelectionDropdown
+                        label="Количество итоговых .tex файлов:"
+                        value={mergeMode}
+                        onChange={setMergeMode}
+                        options={[
+                            { label: "Один", value: "single" },
+                            { label: "Несколько", value: "include" }
+                        ]}
+                    />
+                </div>
+            )}
 
             <div className="block-container">
                 <label className="block-label">

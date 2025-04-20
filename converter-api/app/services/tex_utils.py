@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 
 def html_to_rgb(color: str) -> str:
@@ -23,7 +24,7 @@ def patch_tex_file(tex: str, code_bg: str, text_bg: str, output_bg: str, remove_
 \usepackage{fontspec}
 \usepackage{polyglossia}
 \setdefaultlanguage{russian}
-\setmainfont{Times New Roman}
+\setmainfont{DejaVu Serif}
 \newfontfamily\cyrillicfonttt{Courier New}
 """
     )
@@ -35,3 +36,27 @@ def patch_tex_file(tex: str, code_bg: str, text_bg: str, output_bg: str, remove_
             r"\\prompt\{In\}\{incolor\}\{[^\}]*\}\{\\boxspacing\}\n?", "", tex)
 
     return tex
+
+
+def split_tex_file(tex_path: Path):
+    with tex_path.open("r", encoding="utf-8") as f:
+        tex = f.read()
+
+    preamble_match = re.search(r"^(.*?)\\begin{document}", tex, re.DOTALL)
+    body_match = re.search(
+        r"\\begin{document}(.*?)\\end{document}", tex, re.DOTALL)
+
+    if not preamble_match or not body_match:
+        raise ValueError(
+            f"Не удалось найти преамбулу или тело документа в файле {tex_path}")
+
+    preamble = preamble_match.group(1).strip()
+    body = body_match.group(1).strip()
+
+    return preamble, body
+
+
+def overwrite_with_body_only(tex_path: Path):
+    _, body = split_tex_file(tex_path)
+    with tex_path.open("w", encoding="utf-8") as f:
+        f.write(body)

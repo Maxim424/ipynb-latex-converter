@@ -50,11 +50,13 @@ def convert_file(input_file, selected_cells, output_file, code_bg, text_bg, outp
     with open(output_tex, 'w', encoding='utf-8') as f:
         f.write(tex)
 
-    print(f"❗️ {output_file}")
-    subprocess.run([
-        "xelatex",
-        "-interaction=nonstopmode",
-        f"{output_file}.tex"
-    ], check=True, cwd=input_file.parent)
+    try:
+        subprocess.run([
+            "xelatex",
+            "-interaction=nonstopmode",
+            f"{output_file}.tex"
+        ], check=True, cwd=input_file.parent)
+    except:
+        print("silence warnings")
 
     temp_ipynb.unlink()
