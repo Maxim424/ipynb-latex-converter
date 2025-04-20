@@ -17,6 +17,17 @@ const ProcessPageController = () => {
 
     const { showToast } = useToast();
     const baseUrl = "http://127.0.0.1:8000/";
+    const sessionId = getSessionId();
+
+    function getSessionId() {
+        let sessionId = localStorage.getItem("session_id");
+        if (!sessionId) {
+            sessionId = crypto.randomUUID();
+            localStorage.setItem("session_id", sessionId);
+        }
+        return sessionId;
+    }
+
 
     const handleFileLoad = async (files) => {
         try {
@@ -106,26 +117,29 @@ const ProcessPageController = () => {
             showToast("Сначала необходимо выбрать файл(ы)");
             return;
         }
-    
+
         const formData = new FormData();
-    
+
         // Добавляем все файлы в formData
         files.forEach((file) => {
             formData.append("files", file);
         });
-    
+
         // Прочие параметры
         formData.append("selectedCells", JSON.stringify(selectedCells));
         formData.append("codeBg", codeBg);
         formData.append("includeCellNumbers", includeCellNumbers);
         formData.append("mergeMode", mergeMode); // "single" или "include"
-    
+
         try {
             const response = await fetch(`${baseUrl}convert/`, {
                 method: "POST",
                 body: formData,
+                headers: {
+                    "X-Session-ID": sessionId
+                }
             });
-    
+
             if (response.ok) {
                 const data = await response.json();
                 setFileId(data.file_id);
@@ -137,7 +151,7 @@ const ProcessPageController = () => {
         } catch (error) {
             showToast(`Ошибка: ${error}`);
         }
-    };    
+    };
 
     const handleDownload = async (file, format) => {
         if (!fileId) {

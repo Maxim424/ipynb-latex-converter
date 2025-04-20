@@ -2,6 +2,7 @@ from fastapi.responses import JSONResponse, FileResponse
 from pathlib import Path
 import os
 import zipfile
+import shutil
 
 UPLOAD_DIR = Path("./uploaded_files")
 
@@ -80,3 +81,11 @@ def get_download_response(file_name: str):
             headers={"Content-Disposition": f"attachment; filename={file_name}.zip"}
         )
     return JSONResponse(content={"error": f"File not found: {file_name}"}, status_code=404)
+
+
+def clear_directory(directory_path: Path):
+    if directory_path.exists() and directory_path.is_dir():
+        try:
+            shutil.rmtree(directory_path)
+        except Exception as e:
+            print(f"Ошибка при удалении {directory_path}: {e}")

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Form, UploadFile
+from fastapi import APIRouter, Form, UploadFile, Header
 from fastapi.responses import JSONResponse
 from .services import conversion, file_utils, tex_utils
 import shutil
@@ -16,6 +16,7 @@ UPLOAD_DIR = Path("./uploaded_files")
 @router.post("/convert/")
 async def convert_ipynb(
     files: list[UploadFile],
+    session_id: str = Header(..., alias="X-Session-ID"),
     selectedCells: str = Form(...),
     codeBg: str = Form("#f6f8fa"),
     textBg: str = Form("#ffffff"),
@@ -23,7 +24,8 @@ async def convert_ipynb(
     includeCellNumbers: str = Form("true"),
     mergeMode: str = Form("single")  # "single" or "include"
 ):
-    unique_id = str(uuid.uuid4())
+    file_utils.clear_directory(UPLOAD_DIR / session_id)
+    unique_id = session_id
     remove_prompt_numbers = includeCellNumbers != "true"
     selected_cells = json.loads(selectedCells)
 

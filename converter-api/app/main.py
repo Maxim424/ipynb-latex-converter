@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from . import routes
 from pathlib import Path
+import asyncio
+from .services import cleanup_manager
 
 UPLOAD_DIR = Path("./uploaded_files")
 UPLOAD_DIR.mkdir(exist_ok=True)
@@ -16,3 +18,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Запуск фоновой задачи при старте приложения
+@app.on_event("startup")
+async def start_cleanup_task():
+    asyncio.create_task(cleanup_manager.cleanup_old_sessions())
