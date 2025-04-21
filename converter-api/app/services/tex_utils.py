@@ -25,7 +25,7 @@ def patch_tex_file(tex: str, code_bg: str, text_bg: str, output_bg: str, remove_
 \usepackage{polyglossia}
 \setdefaultlanguage{russian}
 \setmainfont{DejaVu Serif}
-\newfontfamily\cyrillicfonttt{Courier New}
+\newfontfamily\cyrillicfonttt{DejaVu Sans Mono}
 """
     )
 

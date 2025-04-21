@@ -8,7 +8,10 @@ RUN apt-get update && apt-get install -y \
     texlive-fonts-recommended \
     texlive-fonts-extra \
     texlive-xetex \
+    texlive-lang-cyrillic \
+    texlive-latex-recommended \
     pandoc \
+    python3-pygments \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
