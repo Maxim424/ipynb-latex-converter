@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ProcessPage from "./ProcessPage";
 import { useToast } from "../../design_kit/notification/ToastContext";
+import { v4 as uuidv4 } from "uuid";
 
 const ProcessPageController = () => {
     const [fileContent, setFileContent] = useState("");
@@ -22,12 +23,11 @@ const ProcessPageController = () => {
     function getSessionId() {
         let sessionId = localStorage.getItem("session_id");
         if (!sessionId) {
-            sessionId = crypto.randomUUID();
+            sessionId = uuidv4();
             localStorage.setItem("session_id", sessionId);
         }
         return sessionId;
     }
-
 
     const handleFileLoad = async (files) => {
         try {
