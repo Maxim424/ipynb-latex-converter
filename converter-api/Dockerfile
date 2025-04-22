@@ -12,6 +12,10 @@ RUN apt-get update && apt-get install -y \
     texlive-latex-recommended \
     pandoc \
     python3-pygments \
+    fonts-dejavu \
+    fonts-dejavu-core \
+    fonts-dejavu-extra \
+    fonts-freefont-ttf \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
