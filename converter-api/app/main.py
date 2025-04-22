@@ -13,13 +13,15 @@ app.include_router(routes.router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Запуск фоновой задачи при старте приложения
+
+
 @app.on_event("startup")
 async def start_cleanup_task():
     asyncio.create_task(cleanup_manager.cleanup_old_sessions())
