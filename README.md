@@ -1,48 +1,21 @@
-# Project Overview
+# Обзор проекта
 
-This project is a web application for converting Jupyter Notebook (`.ipynb`) files to LaTeX. Users can upload `.ipynb` files, select specific cells for inclusion, customize the formatting, and download the resulting `.tex` file. The application consists of a frontend built with React and a backend powered by FastAPI.
+Проект представляет собой веб-приложение для конвертации файлов Jupyter Notebook (`.ipynb`) в форматы LaTeX и PDF. Пользователи могут загружать до 10 .ipynb-файлов, выбирать ячейки для включения в итоговый документ, указывать параметры форматирования и скачивать результаты конвертации. Клиентская часть приложения разработана на языке JavaScript с использованием фреймворка React, а серверная часть – на языке Python с использованием FastApi.
 
-## Features
+### Запуск приложения с помощью Docker
 
-- Upload `.ipynb` files.
-- Convert Jupyter Notebooks to LaTeX format.
-- Customize the output (e.g., select cells, modify formatting).
-- Download the generated `.tex` file.
-
-## Prerequisites
-
-To run the application locally, ensure the following are installed:
-
-- Docker
-- Docker Compose
-
-## Setup and Deployment
-
-### Clone the Repository
-
-```bash
-git clone <repository_url>
-cd <repository_name>
-```
-
-### Build and Run the Application Using Docker
-
-1. **Build the Docker containers:**
+**Для тестовой среды**
 
    ```bash
-   docker-compose build
+   ENV_FILE=.env.development docker-compose up --build
    ```
 
-2. **Start the application:**
+**Для продовой среды**
 
    ```bash
-   docker-compose up
+   ENV_FILE=.env.production docker-compose up --build
    ```
 
-3. The frontend will be available at `http://localhost:3000`, and the backend API will be accessible at `http://localhost:8000`.
+### Использование
 
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-
+На данный момент приложение доступно по адресу [http://ipynb-converter.ru](http://ipynb-converter.ru)
