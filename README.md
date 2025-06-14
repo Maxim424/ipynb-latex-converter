@@ -16,6 +16,27 @@
    ENV_FILE=.env.production docker-compose up --build
    ```
 
+### Запуск приложения без Docker
+
+**Для запуска бэкенда** сначала необходимо создать и активировать окружение Python:
+
+   ```bash
+   python -m venv env
+   source env/bin/activate
+   ```
+Затем запустить сервер Uvicorn:
+
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+Для запуска фронтенда необходимо выполнить команды:
+
+   ```bash
+   npm install
+   npm start
+   ```
+
 ### Использование
 
 На данный момент приложение доступно по адресу [http://ipynb-converter.ru](http://ipynb-converter.ru)
