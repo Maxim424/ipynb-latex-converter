@@ -36,7 +36,3 @@
    npm install
    npm start
    ```
-
-### Использование
-
-На данный момент приложение доступно по адресу [http://ipynb-converter.ru](http://ipynb-converter.ru)
